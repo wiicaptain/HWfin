@@ -1,0 +1,310 @@
+Model
+/*----------------------------------------------------------------------------------------------------------------------------------------------*/
+package Model;    //會員
+
+public class member {
+	private Integer id;
+	private String membercode;
+	private String name;
+	private String username;
+	private String password;
+	private String address;
+	private String mobile;
+	private String phone;
+	public member() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public member(String membercode, String name, String username, String password, String address, String mobile,
+			String phone) {
+		super();
+		this.membercode = membercode;
+		this.name = name;
+		this.username = username;
+		this.password = password;
+		this.address = address;
+		this.mobile = mobile;
+		this.phone = phone;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getMembercode() {
+		return membercode;
+	}
+	public void setMembercode(String membercode) {
+		this.membercode = membercode;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getMobile() {
+		return mobile;
+	}
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	
+}
+/*----------------------------------------------------------------------------------------------------------------------------------------------*/
+package Model;  //訂單
+
+public class porder {
+	private int id;
+	private String membercode;
+	private int pen;
+	private int automaticpen;
+	private int fountainpen;
+	private int ruler;
+	private int triangleboard;
+	private int compasses;
+	private int notebook;
+	private int eraser;
+	private int liquidpaper;
+	private int stickynote;
+
+	public porder() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public porder(String membercode, int pen, int automaticpen, int fountainpen, int ruler, int triangleboard,
+			int compasses, int notebook, int eraser, int liquidpaper, int stickynote) {
+		super();
+		this.membercode = membercode;
+		this.pen = pen;
+		this.automaticpen = automaticpen;
+		this.fountainpen = fountainpen;
+		this.ruler = ruler;
+		this.triangleboard = triangleboard;
+		this.compasses = compasses;
+		this.notebook = notebook;
+		this.eraser = eraser;
+		this.liquidpaper = liquidpaper;
+		this.stickynote = stickynote;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getMembercode() {
+		return membercode;
+	}
+	public void setMembercode(String membercode) {
+		this.membercode = membercode;
+	}
+	public int getPen() {
+		return pen;
+	}
+	public void setPen(int pen) {
+		this.pen = pen;
+	}
+	public int getAutomaticpen() {
+		return automaticpen;
+	}
+	public void setAutomaticpen(int automaticpen) {
+		this.automaticpen = automaticpen;
+	}
+	public int getFountainpen() {
+		return fountainpen;
+	}
+	public void setFountainpen(int fountainpen) {
+		this.fountainpen = fountainpen;
+	}
+	public int getRuler() {
+		return ruler;
+	}
+	public void setRuler(int ruler) {
+		this.ruler = ruler;
+	}
+	public int getTriangleboard() {
+		return triangleboard;
+	}
+	public void setTriangleboard(int triangleboard) {
+		this.triangleboard = triangleboard;
+	}
+	public int getCompasses() {
+		return compasses;
+	}
+	public void setCompasses(int compasses) {
+		this.compasses = compasses;
+	}
+	public int getNotebook() {
+		return notebook;
+	}
+	public void setNotebook(int notebook) {
+		this.notebook = notebook;
+	}
+	public int getEraser() {
+		return eraser;
+	}
+	public void setEraser(int eraser) {
+		this.eraser = eraser;
+	}
+	public int getLiquidpaper() {
+		return liquidpaper;
+	}
+	public void setLiquidpaper(int liquidpaper) {
+		this.liquidpaper = liquidpaper;
+	}
+	public int getStickynote() {
+		return stickynote;
+	}
+	public void setStickynote(int stickynote) {
+		this.stickynote = stickynote;
+	}
+		
+}
+/*----------------------------------------------------------------------------------------------------------------------------------------------*/
+package Model;   //此為會員與訂單的view，用來串聯兩者具有的membercode(會員交易碼)
+
+public class shoppinglist {
+	private String membercode;
+	private String name;
+	private String pen;
+	private String automaticpen;
+	private String fountainpen;
+	private String ruler;
+	private String triangleboard;
+	private String compasses;
+	private String notebook;
+	private String eraser;
+	private String  liquidpaper;
+	private String stickynote;
+	
+	public shoppinglist() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	
+	public shoppinglist(String membercode, String name, String pen, String automaticpen, String fountainpen,
+			String ruler, String triangleboard, String compasses, String notebook, String eraser, String liquidpaper,
+			String stickynote) {
+		super();
+		this.membercode = membercode;
+		this.name = name;
+		this.pen = pen;
+		this.automaticpen = automaticpen;
+		this.fountainpen = fountainpen;
+		this.ruler = ruler;
+		this.triangleboard = triangleboard;
+		this.compasses = compasses;
+		this.notebook = notebook;
+		this.eraser = eraser;
+		this.liquidpaper = liquidpaper;
+		this.stickynote = stickynote;
+	}
+
+
+
+	public String getMembercode() {
+		return membercode;
+	}
+	public void setMembercode(String membercode) {
+		this.membercode = membercode;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getPen() {
+		return pen;
+	}
+	public void setPen(String pen) {
+		this.pen = pen;
+	}
+	public String getAutomaticpen() {
+		return automaticpen;
+	}
+	public void setAutomaticpen(String automaticpen) {
+		this.automaticpen = automaticpen;
+	}
+
+	public String getFountainpen() {
+		return fountainpen;
+	}
+
+	public void setFountainpen(String fountainpen) {
+		this.fountainpen = fountainpen;
+	}
+
+	public String getRuler() {
+		return ruler;
+	}
+	public void setRuler(String ruler) {
+		this.ruler = ruler;
+	}
+	public String getTriangleboard() {
+		return triangleboard;
+	}
+	public void setTriangleboard(String triangleboard) {
+		this.triangleboard = triangleboard;
+	}
+	public String getCompasses() {
+		return compasses;
+	}
+	public void setCompasses(String compasses) {
+		this.compasses = compasses;
+	}
+	public String getNotebook() {
+		return notebook;
+	}
+	public void setNotebook(String notebook) {
+		this.notebook = notebook;
+	}
+	public String getEraser() {
+		return eraser;
+	}
+	public void setEraser(String eraser) {
+		this.eraser = eraser;
+	}
+	public String getLiquidpaper() {
+		return liquidpaper;
+	}
+	public void setLiquidpaper(String liquidpaper) {
+		this.liquidpaper = liquidpaper;
+	}
+	public String getStickynote() {
+		return stickynote;
+	}
+	public void setStickynote(String stickynote) {
+		this.stickynote = stickynote;
+	}
+	
+	
+}

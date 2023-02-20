@@ -1,0 +1,690 @@
+Dao
+/*----------------------------------------------------------------------------------------------------------------------------------------------*/
+package Dao;  //連線
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class ConnectionDB {
+
+	public static void main(String[] args) {
+		System.out.println(ConnectionDB.getDB());
+	}
+	public static Connection getDB() {
+		Connection conn=null;
+		String url="jdbc:mysql://localhost:3306/hw";
+		String name="root";
+		String password="1234";
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn=DriverManager.getConnection(url,name,password);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return conn;
+	} 
+}
+
+/*----------------------------------------------------------------------------------------------------------------------------------------------*/
+package Dao;   //money，用來處理金錢方面的class
+
+import Model.porder;
+
+public class money {
+	private int sum;
+	private int yourpay;
+	private boolean ismember;
+	
+	public int getSum(porder p) {
+		if(ismember) {
+			sum=p.getStickynote()*143+p.getPen()*6+p.getAutomaticpen()*30+p.getFountainpen()*500+p.getRuler()*8+p.getTriangleboard()*5+p.getCompasses()*22+p.getNotebook()*30+p.getEraser()*8+p.getLiquidpaper()*29;
+		return (int)(sum*0.85);
+		}else {
+			sum=p.getStickynote()*143+p.getPen()*6+p.getAutomaticpen()*30+p.getFountainpen()*500+p.getRuler()*8+p.getTriangleboard()*5+p.getCompasses()*22+p.getNotebook()*30+p.getEraser()*8+p.getLiquidpaper()*29;
+			return sum;
+		}
+		
+	}
+	
+	public void setSum(int sum) {
+		this.sum=sum;
+	}
+
+
+	public boolean isIsmember() {
+		return ismember;
+	}
+
+
+
+	public void setIsmember(boolean ismember) {
+		this.ismember = ismember;
+	}
+
+
+
+	public int getYourpay() {
+		return yourpay;
+	}
+
+
+	public void setYourpay(int yourpay) {
+		this.yourpay = yourpay;
+	}
+
+	
+	public int getThousand() {
+		if(getsmallChange()>=0) {
+			return getsmallChange()/1000;
+		}
+		else {
+			return 0;
+		}
+
+	}
+
+	public int getFiveHundred() {
+		if(getsmallChange()>=0) {
+			return (getsmallChange()%1000)/500;
+		}
+		else {
+			return 0;
+		}
+	
+	}
+
+	public int getHundered() {
+		if(getsmallChange()>=0) {
+			return ((getsmallChange()%1000)%500)/100;
+		}
+		else {
+			return 0;
+		}
+
+		
+
+	}
+
+
+	public int getFifty() {
+		if(getsmallChange()>=0) {
+			return (((getsmallChange()%1000)%500)%100)/50;
+		}
+		else {
+			return 0;
+		}
+
+	}
+
+	public int getTen() {
+		if(getsmallChange()>=0) {
+			return ((((getsmallChange()%1000)%500)%100)%50)/10;
+		}
+		else {
+			return 0;
+		}
+
+		
+
+	}
+
+
+	public int getFive() {
+		if(getsmallChange()>=0) {
+			return (((((getsmallChange()%1000)%500)%100)%50)%10)/5;
+
+		}
+		else {
+			return 0;
+		}
+		
+	}
+
+	public int getOne() {
+		if(getsmallChange()>=0) {
+		return (((((getsmallChange()%1000)%500)%100)%50)%10)%5/1;	
+		}
+		else {
+			return 0;
+		}
+
+		
+	}
+
+	
+	public int getsmallChange() {
+		if(yourpay-sum>=0) {
+			return yourpay-sum;
+		} 
+		else {
+			return 0;
+		}
+	}
+	
+	
+	
+	public String show(porder p) {
+		return "您此次的購買項目為："+
+				"\n================================"+
+				"\n三角板：	"+p.getTriangleboard()+"個"+
+				"\n便利貼：	"+p.getStickynote()+"個"+
+				"\n圓規：	"+p.getCompasses()+"個"+
+				"\n橡皮擦：	"+p.getEraser()+"個"+
+				"\n鋼筆：	"+p.getFountainpen()+"個"+
+				"\n自動筆：	"+p.getAutomaticpen()+"個"+
+				"\n直尺：	"+p.getRuler()+"個"+
+				"\n鉛筆：	"+p.getPen()+"個"+
+				"\n立可白：	"+p.getLiquidpaper()+"個"+
+				"\n筆記本：	"+p.getNotebook()+"個"+
+				"\n================================"+
+				"\n================================"+
+				"\n商品總金額為：	"+getSum(p)+"元";
+	}
+	
+	public String showPay() {
+		return "\n================================"+
+				"\n收取您：	"+yourpay+"元"+
+				"\n================================"+
+				"\n找您：	"+getsmallChange()+"元"+
+				"\n一千元：	"+getThousand()+"張"+
+				"\n五百元：	"+getFiveHundred()+"張"+
+				"\n一百元：	"+getHundered()+"張"+
+				"\n五十元：	"+getFifty()+"枚"+
+				"\n十元：	"+getTen()+"枚"+
+				"\n五元：	"+getFive()+"枚"+
+				"\n一元：	"+getOne()+"枚";
+	}
+}
+/*----------------------------------------------------------------------------------------------------------------------------------------------*/
+package Dao;  //時間
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class timeDao {
+	public static String NowDate() {
+		Date d=new Date();
+		SimpleDateFormat s=new SimpleDateFormat("yyyy年MM月dd日");
+		return s.format(d);
+	}
+	public static String NowTime() {
+				Date d=new Date();
+				SimpleDateFormat s=new SimpleDateFormat("a  hh點mm分ss秒");
+				return s.format(d);
+	}
+}
+/*----------------------------------------------------------------------------------------------------------------------------------------------*/
+package Dao.member;  //會員的CRU，沒有D，不想讓人刪除會員
+
+import java.util.List;
+
+import Model.member;
+
+public interface memberDao {
+		//新增
+		void add(member m);
+		//查詢
+		boolean QueryMemberCode(String membercode);
+		member QueryMember(String username,String password);
+		boolean QueryUsername(String username);
+		member QueryMember(String username);
+		member QueryUserAndCode(String username,String membercode);
+		//更新
+		void update(member m);
+}
+/*----------------------------------------------------------------------------------------------------------------------------------------------*/
+public class implMember implements memberDao{
+@Override
+	public void add(member m) {
+		Connection conn=ConnectionDB.getDB();
+		String SQL="insert into member(membercode,name,username,password,address,mobile,phone) "
+				+ "values(?,?,?,?,?,?,?) ";
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setString(1, m.getMembercode());
+			ps.setString(2, m.getName());
+			ps.setString(3, m.getUsername());
+			ps.setString(4, m.getPassword());
+			ps.setString(5, m.getAddress());
+			ps.setString(6, m.getMobile());
+			ps.setString(7, m.getPhone());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public boolean QueryMemberCode(String membercode) {
+		Connection conn=ConnectionDB.getDB();
+		String SQL="select * from member where membercode=?";
+		boolean m=false;
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setString(1, membercode);
+			ResultSet rs=ps.executeQuery();
+			if(rs.next()) m=true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return m;
+	}
+
+	@Override
+	public member QueryMember(String username, String password) {
+		Connection conn=ConnectionDB.getDB();
+		String SQL="select * from member where username=? and password=?";
+		member m=null;
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setString(1, username);
+			ps.setString(2, password);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()) {
+				m=new member();
+				m.setId(rs.getInt("id"));
+				m.setMembercode(rs.getString("membercode"));
+				m.setName(rs.getString("name"));
+				m.setUsername(rs.getString("username"));
+				m.setPassword(rs.getString("password"));
+				m.setAddress(rs.getString("address"));
+				m.setMobile(rs.getString("mobile"));
+				m.setPhone(rs.getString("phone"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return m;
+	}
+
+	@Override
+	public boolean QueryUsername(String username) {
+		Connection conn=ConnectionDB.getDB();
+		String SQL="select * from member where username=?";
+		boolean m=false;
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setString(1, username);
+			ResultSet rs=ps.executeQuery();
+			if(rs.next()) m=true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return m;
+	}
+
+	
+	
+	@Override
+	public member QueryMember(String username) {
+		Connection conn=ConnectionDB.getDB();
+		String SQL="select * from member where username=?";
+		member m=null;
+		try {
+			PreparedStatement ps = conn.prepareStatement(SQL);
+			ps.setString(1, username);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()) {
+				m=new member();
+				m.setId(rs.getInt("id"));
+				m.setMembercode(rs.getString("membercode"));
+				m.setName(rs.getString("name"));
+				m.setUsername(rs.getString("username"));
+				m.setPassword(rs.getString("password"));
+				m.setAddress(rs.getString("address"));
+				m.setMobile(rs.getString("mobile"));
+				m.setPhone(rs.getString("phone"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return m;
+	}
+	
+	
+
+	@Override
+	public member QueryUserAndCode(String username, String membercode) {
+		Connection conn=ConnectionDB.getDB();
+		String SQL="select * from member where username=? and membercode=?";
+		member m=null;
+	
+		try {
+			PreparedStatement ps = conn.prepareStatement(SQL);
+			ps.setString(1, username);
+			ps.setString(2, membercode);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()) {
+				m=new member();
+				m.setId(rs.getInt("id"));
+				m.setMembercode(rs.getString("membercode"));
+				m.setName(rs.getString("name"));
+				m.setUsername(rs.getString("username"));
+				m.setPassword(rs.getString("password"));
+				m.setAddress(rs.getString("address"));
+				m.setMobile(rs.getString("mobile"));
+				m.setPhone(rs.getString("phone"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return m;
+	}
+
+	@Override
+	public void update(member m) {
+		Connection conn=ConnectionDB.getDB();
+		String SQL="update member set membercode=?,name=?,username=?,password=?,address=?,mobile=?,phone=? "
+				+ "where id=?";
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setString(1, m.getMembercode());
+			ps.setString(2, m.getName());
+			ps.setString(3, m.getUsername());
+			ps.setString(4, m.getPassword());
+			ps.setString(5, m.getAddress());
+			ps.setString(6, m.getMobile());
+			ps.setString(7, m.getPhone());
+			ps.setInt(8, m.getId());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+}
+/*----------------------------------------------------------------------------------------------------------------------------------------------*/
+package Dao.porder;	//訂單的CRUD
+
+import java.util.List;
+
+import Model.porder;
+
+public interface porderDao {
+	//新增
+	void add(porder p);
+	//查詢
+	List<porder> selectMemberCode(String membercode);
+	boolean MemberCodeIsExist(String membercode);
+	porder selectId(int id);
+	//修改
+	void update(porder p);
+	//刪除
+	void delete(int id);
+}
+/*----------------------------------------------------------------------------------------------------------------------------------------------*/
+public class implPorder implements porderDao{
+@Override
+	public void add(porder p) {
+		Connection conn=ConnectionDB.getDB();
+		String SQL="insert into porder"
+				+ "(membercode,pen,automaticpen,fountainpen,ruler,triangleboard,compasses,notebook,eraser,liquidpaper,stickynote) "
+				+ "values(?,?,?,?,?,?,?,?,?,?,?)";
+		try {													  
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setString(1, p.getMembercode());
+			ps.setInt(2, p.getPen());
+			ps.setInt(3, p.getAutomaticpen());
+			ps.setInt(4, p.getFountainpen());
+			ps.setInt(5, p.getRuler());
+			ps.setInt(6, p.getTriangleboard());
+			ps.setInt(7, p.getCompasses());
+			ps.setInt(8, p.getNotebook());
+			ps.setInt(9, p.getEraser());
+			ps.setInt(10, p.getLiquidpaper());
+			ps.setInt(11, p.getStickynote());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public List<porder> selectMemberCode(String membercode) {
+		Connection conn=ConnectionDB.getDB();
+		String SQL="select * from porder where membercode=?";
+		
+		List<porder> l=new ArrayList();
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setString(1, membercode);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()) {
+				porder p=new porder();
+				p.setId(rs.getInt("id"));
+				p.setMembercode(rs.getString("membercode"));
+				p.setPen(rs.getInt("pen"));
+				p.setAutomaticpen(rs.getInt("automaticpen"));
+				p.setFountainpen(rs.getInt("fountainpen"));
+				p.setRuler(rs.getInt("ruler"));
+				p.setTriangleboard(rs.getInt("triangleboard"));
+				p.setCompasses(rs.getInt("compasses"));
+				p.setNotebook(rs.getInt("notebook"));
+				p.setEraser(rs.getInt("eraser"));
+				p.setLiquidpaper(rs.getInt("liquidpaper"));
+				p.setStickynote(rs.getInt("stickynote"));
+				l.add(p);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return l;
+	}
+
+	
+	
+	@Override
+	public boolean MemberCodeIsExist(String membercode) {
+		Connection conn=ConnectionDB.getDB();
+		String SQL="select * from porder where membercode=?";
+		boolean b=false;
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setString(1, membercode);
+			ResultSet rs=ps.executeQuery();
+			if(rs.next()) b=true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return b;
+	}
+	
+	
+
+	@Override
+	public porder selectId(int id) {
+		Connection conn=ConnectionDB.getDB();
+		String SQL="select * from porder where id=?";
+		porder p=null;
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setInt(1, id);
+			ResultSet rs=ps.executeQuery();
+			while(rs.next()) {
+				p=new porder();
+				p.setId(rs.getInt("id"));
+				p.setMembercode(rs.getString("membercode"));
+				p.setPen(rs.getInt("pen"));
+				p.setAutomaticpen(rs.getInt("automaticpen"));
+				p.setFountainpen(rs.getInt("fountainpen"));
+				p.setRuler(rs.getInt("ruler"));
+				p.setTriangleboard(rs.getInt("triangleboard"));
+				p.setCompasses(rs.getInt("compasses"));
+				p.setNotebook(rs.getInt("notebook"));
+				p.setEraser(rs.getInt("eraser"));
+				p.setLiquidpaper(rs.getInt("liquidpaper"));
+				p.setStickynote(rs.getInt("stickynote"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return p;
+	}
+
+	@Override
+	public void update(porder p) {
+		Connection conn=ConnectionDB.getDB();
+		String SQL="update porder set membercode=?,pen=?,automaticpen=?,fountainpen=?,ruler=?,"
+				+ "triangleboard=?,compasses=?,notebook=?,eraser=?,liquidpaper=?,stickynote=? "
+				+ "where id=?";
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setString(1, p.getMembercode());
+			ps.setInt(2, p.getPen());
+			ps.setInt(3, p.getAutomaticpen());
+			ps.setInt(4, p.getFountainpen());
+			ps.setInt(5, p.getRuler());
+			ps.setInt(6, p.getTriangleboard());
+			ps.setInt(7, p.getCompasses());
+			ps.setInt(8, p.getNotebook());
+			ps.setInt(9, p.getEraser());
+			ps.setInt(10, p.getLiquidpaper());
+			ps.setInt(11, p.getStickynote());
+			ps.setInt(12, p.getId());
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void delete(int id) {
+		Connection conn=ConnectionDB.getDB();
+		String SQL="delete from porder where id=?";
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setInt(1, id);
+			ps.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+}
+/*----------------------------------------------------------------------------------------------------------------------------------------------*/
+package Dao.shoppinglist;	//透過member與porder的membercode連接起來的view，僅作為查詢當會員有訂單時的查詢所有訂單及個人訂單，同時判斷是否有這組會員交易碼存在
+
+import java.util.List;
+
+import Model.shoppinglist;
+
+public interface shoppinglistDao {
+	
+	//view read
+	List<shoppinglist> QueryAll(); 
+	List<shoppinglist> QueryMemberCode(String membercode);
+	boolean MemberCodeIsExist(String membercode);
+}
+/*----------------------------------------------------------------------------------------------------------------------------------------------*/
+public class implShoppinglist implements shoppinglistDao{
+@Override
+	public List<shoppinglist> QueryAll() {
+		Connection conn=new ConnectionDB().getDB();
+		String SQL="select * from shoppinglist";
+		List<shoppinglist> l=new ArrayList();
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ResultSet rs=ps.executeQuery();
+			
+			while(rs.next()) {
+				shoppinglist s=new shoppinglist();
+				s.setMembercode(rs.getString("membercode"));
+				s.setName(rs.getString("name"));
+				s.setPen(rs.getString("pen"));
+				s.setAutomaticpen(rs.getString("automaticpen"));
+				s.setFountainpen(rs.getString("fountainpen"));
+				s.setRuler(rs.getString("ruler"));
+				s.setTriangleboard(rs.getString("triangleboard"));
+				s.setCompasses(rs.getString("compasses"));
+				s.setNotebook(rs.getString("notebook"));
+				s.setEraser(rs.getString("eraser"));
+				s.setLiquidpaper(rs.getString("liquidpaper"));
+				s.setStickynote(rs.getString("stickynote"));
+				l.add(s);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return l;
+	}
+
+	@Override
+	public List<shoppinglist> QueryMemberCode(String membercode) {
+		Connection conn=new ConnectionDB().getDB();
+		String SQL="select * from shoppinglist where membercode=?";
+		List<shoppinglist> l=new ArrayList();
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setString(1, membercode);
+			ResultSet rs=ps.executeQuery();
+			
+			while(rs.next()) {
+				shoppinglist s=new shoppinglist();
+				s.setMembercode(rs.getString("membercode"));
+				s.setName(rs.getString("name"));
+				s.setPen(rs.getString("pen"));
+				s.setAutomaticpen(rs.getString("automaticpen"));
+				s.setFountainpen(rs.getString("fountainpen"));
+				s.setRuler(rs.getString("ruler"));
+				s.setTriangleboard(rs.getString("triangleboard"));
+				s.setCompasses(rs.getString("compasses"));
+				s.setNotebook(rs.getString("notebook"));
+				s.setEraser(rs.getString("eraser"));
+				s.setLiquidpaper(rs.getString("liquidpaper"));
+				s.setStickynote(rs.getString("stickynote"));
+				l.add(s);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return l;
+	}
+
+	@Override
+	public boolean MemberCodeIsExist(String membercode) {
+		Connection conn=new ConnectionDB().getDB();
+		String SQL="select * from shoppinglist where membercode=?";
+		boolean b=false;
+		try {
+			PreparedStatement ps=conn.prepareStatement(SQL);
+			ps.setString(1, membercode);
+			ResultSet rs=ps.executeQuery();
+			if(rs.next()) b=true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return b;
+	}
+	
+	
+
+}

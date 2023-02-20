@@ -1,0 +1,586 @@
+登入頁面:
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+使用訪客登入
+userButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				porderUI pu=new porderUI(false); //呼叫非會員的porderUI頁面
+				pu.show();
+				dispose();
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+註冊切換頁面		
+add.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				addMemberUI aU=new addMemberUI();
+				aU.show();
+				dispose();
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+登入按鈕 三次輸入錯誤先跳轉到登入失敗頁面，引導使用者註冊，或是再返回登入頁面
+loginButton.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				String USERNAME=username.getText();
+				String PASSWORD=password.getText();
+				member m=new implMember().QueryMember(USERNAME, PASSWORD);
+		
+				
+				if(m!=null) {
+					loginSuccess ls=new loginSuccess();
+					JOptionPane.showMessageDialog(rootPane, "登入成功!");
+					c=0;   //Global的static計數用c，成功就歸零
+					ls.show();
+					dispose();
+				}
+				else {
+					c++; //Global的static計數用c，每失敗一次就累加
+					JOptionPane.showMessageDialog(rootPane, "帳號、密碼不對，這是第"+c+"次輸入錯誤");
+				}
+				if(c>2) {
+					JOptionPane.showMessageDialog(rootPane, "帳號、密碼不對，這是第"+c+"次輸入錯誤，將引導您註冊");
+					loginError le=new loginError();
+					c=0; //Global的static計數用c，累積達三次跳轉頁面並歸零
+					le.show();
+					dispose();
+					
+				}
+				
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+登入成功顯示頁面:
+
+查詢/更改個人資料頁面切換
+btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				memberUpdateUI UUI=new memberUpdateUI();
+				UUI.show();
+				dispose();
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+購物頁面切換
+
+btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				porderUI pu=new porderUI(true);  //呼叫是會員的porderUI頁面
+				pu.show();
+				dispose();
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+登入失敗頁面:
+
+返回登入頁面
+btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				loginUI lU=new loginUI();
+				lU.show();
+				dispose();
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+註冊頁面切換
+btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				addMemberUI aU=new addMemberUI();
+				aU.show();
+				dispose();
+			}
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+註冊:
+
+		
+addButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String MEMBERCODE=membercode.getText();
+				String NAME=name.getText();
+				String USERNAME=username.getText();
+				String PASSWORD=password.getText();
+				String ADDRESS=address.getText();
+				String MOBILE=mobile.getText();
+				String PHONE=phone.getText();
+				
+				/***********限制使用者輸入資料的格式***************/
+				String patten="\\w{8}";				
+				String mobileCheck="\\d{10}";
+				String phoneCheck="\\d{8}";
+				
+				member m=new member(MEMBERCODE,NAME,USERNAME,PASSWORD,ADDRESS,MOBILE,PHONE);
+				boolean ishasCode=new implMember().QueryMemberCode(MEMBERCODE);
+				boolean ishasUser=new implMember().QueryUsername(USERNAME);
+				if(ishasCode || ishasUser) {
+					JOptionPane.showMessageDialog(rootPane, "已存在的會員碼、帳號名稱，請重新註冊");
+					membercode.setText("");
+					name.setText("");
+					username.setText("");
+					password.setText("");
+					address.setText("");
+					mobile.setText("");
+					phone.setText("");
+				}
+				else if(membercode.getText().matches(patten)&&!NAME.equals("")&&username.getText().matches(patten)&&password.getText().matches(patten)&&!ADDRESS.equals("")&&mobile.getText().matches(mobileCheck)&&phone.getText().matches(phoneCheck)) {
+					new implMember().add(m);
+					JOptionPane.showMessageDialog(rootPane, "註冊成功，將回到登入頁面");
+					loginUI lU=new loginUI();
+					lU.show();
+					dispose();
+				}
+				else if(!membercode.getText().matches(patten)||
+						!username.getText().matches(patten)||
+						!password.getText().matches(patten)||
+						!mobile.getText().matches(mobileCheck)||
+						!phone.getText().matches(phoneCheck)){
+					JOptionPane.showMessageDialog(rootPane, "請正確輸入所需欄位格式");
+				}
+				else {
+					JOptionPane.showMessageDialog(rootPane, "請正確輸入所需欄位內容");
+				}
+			}
+		});
+
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+放棄註冊，返回登入頁面
+btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				loginUI lU=new loginUI();
+				lU.show();
+				dispose();
+			}
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+會員個人資料查詢/更新頁面:
+
+查詢個人資料內容
+searchButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				member m=new implMember().QueryMember(usernameCheck.getText());
+				if(m!=null&&!usernameCheck.getText().equals("")) {
+					search.setText("帳號："+usernameCheck.getText()+"\t大名："+m.getName()
+							+"\n您的會員交易碼為："+m.getMembercode()+"\n\t密碼："
+				+m.getPassword()+"\n\t地址:"+m.getAddress()+"\n\t手機："+m.getMobile()+"\n\t電話："+m.getPhone());
+				}else {
+					JOptionPane.showMessageDialog(rootPane, "查詢失敗，請輸入正確帳號名稱");
+				}
+				
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+更新個人資訊
+updateButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String usernameCheck=username.getText();
+				String membercodeCheck=membercode.getText();
+				member m=new implMember().QueryUserAndCode(usernameCheck, membercodeCheck);
+				
+				String patten="\\w{8}";
+				String mobileCheck="\\d{10}";
+				String phoneCheck="\\d{8}";
+				
+				if(m!=null&&!name.getText().equals("")&&!password.getText().equals("")&&!address.getText().equals("")
+						&&!mobile.getText().equals("")&&!phone.getText().equals("")
+						&&password.getText().matches(patten)&&mobile.getText().matches(mobileCheck)
+						&&phone.getText().matches(phoneCheck)) {
+					m.setName(name.getText());
+					m.setPassword(password.getText());
+					m.setAddress(address.getText());
+					m.setMobile(mobile.getText());
+					m.setPhone(phone.getText());
+					new implMember().update(m);
+					JOptionPane.showMessageDialog(rootPane, "更新完畢!");
+					name.setText("");
+					password.setText("");
+					address.setText("");
+					mobile.setText("");
+					phone.setText("");
+				}else {
+					JOptionPane.showMessageDialog(rootPane, "更新失敗，請輸入正確帳號、會員碼，及欄位內容");
+				}
+				
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+回到登入成功的頁面
+backButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				loginSuccess lS=new loginSuccess();
+				lS.show();
+				dispose();
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+
+購物頁面：
+此頁面用
+public porderUI(boolean ismember) {}
+作為建構，藉此轉換會員與非會員
+
+結帳按鈕
+SubtotalButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int TRIANGLEBOARD=(int)triangleboard.getValue();
+				int STICKYNOTE=(int)(stickynote.getValue());
+				int COMPASSES=(int)(compasses.getValue());
+				int ERASER=(int)(eraser.getValue());
+				int FOUNTAINPEN=(int)(fountainpen.getValue());
+				int AUTOMATICPEN=(int)(automaticpen.getValue());
+				int RULER=(int)(ruler.getValue());
+				int PEN=(int)(pen.getValue());
+				int LIQUIDPAPER=(int)(liquidpaper.getValue());
+				int NOTEBOOK=(int)(notebook.getValue());
+				String MEMBERCODE=membercode.getText();
+				
+				p=new porder(MEMBERCODE,PEN,AUTOMATICPEN,FOUNTAINPEN,RULER,TRIANGLEBOARD,COMPASSES,NOTEBOOK,ERASER,LIQUIDPAPER,STICKYNOTE);
+				
+				money MONEY=new money();
+				if(ismember&&new implMember().QueryMemberCode(MEMBERCODE)) { //如果是會員，並且查詢有這組會員交易碼
+						MONEY.setIsmember(ismember);			//則使用money()的會員方案85折
+						SubtotalText.setText(Integer.toString(MONEY.getSum(p)));
+						output.setText(MONEY.show(p));
+				}else if(!ismember||!new implMember().QueryMemberCode(MEMBERCODE)){	//不是會員，或未輸入會員交易碼，原價
+					JOptionPane.showMessageDialog(rootPane, "您為非會員或是尚未使用交易碼，您購買的商品為原定位價格");
+						SubtotalText.setText(Integer.toString(MONEY.getSum(p)));
+						output.setText(MONEY.show(p));
+				}
+				else if(!ismember&&new implMember().QueryMemberCode(MEMBERCODE)) {	//不是會員，雖然有輸入會員交易碼，依然原價
+					MONEY.setIsmember(!ismember);
+					JOptionPane.showMessageDialog(rootPane, "您為非會員或是尚未使用交易碼，您購買的商品為原定位價格");
+					SubtotalText.setText(Integer.toString(MONEY.getSum(p)));
+					output.setText(MONEY.show(p));
+				}
+				
+			}
+		});
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+忘記會員交易碼時可點入查詢自己的會員交易碼
+if(ismember) { //此按鈕僅有在以會員登入時會顯示
+
+btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				memberUpdateUI uUI=new memberUpdateUI();
+				uUI.show();
+				dispose();
+			}
+		});
+}
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+不是會員時提醒可以註冊的按鈕
+if(!ismember) { //非會員時才會顯示出來
+btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				addMemberUI aMU=new addMemberUI();
+				aMU.show();
+				dispose();
+			}
+		});
+}
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+列印
+printButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					output.print();
+				} catch (PrinterException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+清除所有填入資料
+clearButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				triangleboard.setValue(0);
+				stickynote.setValue(0);
+				compasses.setValue(0);
+				eraser.setValue(0);
+				fountainpen.setValue(0);
+				automaticpen.setValue(0);
+				ruler.setValue(0);
+				pen.setValue(0);
+				liquidpaper.setValue(0);
+				notebook.setValue(0);
+				
+				SubtotalText.setText("0");
+				yourpayText.setText("0");
+				
+				output.setText("");
+				output_2.setText("");
+				membercode.setText("");
+				
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+離開
+exitButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.exit(0);
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+訂單編輯頁面切換按鈕
+if(ismember) { //只有在會員時才會出現的按鈕，限制非會員使用
+btnNewButton_1_1_1_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				porderListUI pLU=new porderListUI();
+				pLU.show();
+				dispose();
+			}
+		});
+}
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+付款、結算找零
+finishButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int YOURPAY=Integer.parseInt(yourpayText.getText());
+				int MUSTPAY=Integer.parseInt(SubtotalText.getText());
+				
+				money MONEY=new money();
+				MONEY.setSum(MUSTPAY);
+				MONEY.setYourpay(YOURPAY);
+				MONEY.getsmallChange();
+				output_2.setText(MONEY.showPay());
+
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+添加此筆訂單
+btnNewButton_1_1_1_1_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int TRIANGLEBOARD=(int)triangleboard.getValue();
+				int STICKYNOTE=(int)(stickynote.getValue());
+				int COMPASSES=(int)(compasses.getValue());
+				int ERASER=(int)(eraser.getValue());
+				int FOUNTAINPEN=(int)(fountainpen.getValue());
+				int AUTOMATICPEN=(int)(automaticpen.getValue());
+				int RULER=(int)(ruler.getValue());
+				int PEN=(int)(pen.getValue());
+				int LIQUIDPAPER=(int)(liquidpaper.getValue());
+				int NOTEBOOK=(int)(notebook.getValue());
+				String MEMBERCODE=membercode.getText();
+				
+				if(new implMember().QueryMemberCode(MEMBERCODE)) { //會員交易碼輸入確認存在才給添加
+					p=new porder(MEMBERCODE,PEN,AUTOMATICPEN,FOUNTAINPEN,RULER,TRIANGLEBOARD,COMPASSES,NOTEBOOK,ERASER,LIQUIDPAPER,STICKYNOTE);
+					new implPorder().add(p);
+					JOptionPane.showMessageDialog(rootPane, "訂單添加完成。");
+				}else {
+					JOptionPane.showMessageDialog(rootPane, "若想加入此筆訂單，請填入正確的會員交易碼");
+				}
+				
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+時間
+
+日期		
+timeDao tD=new timeDao();
+		dateLabel.setText(tD.NowDate());
+
+時分秒		
+new Timer(0,new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				timeLabel.setText(tD.NowTime());
+			}
+			 
+		}).start();
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+訂單查詢/更新 頁面:
+
+查詢所有訂單
+這裡是用Shoppinglist這個view去做查詢，為了顯示出帶有會員交易碼、名字與購買項目，僅作為查詢使用
+searchButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				List<shoppinglist> l=new implShoppinglist().QueryAll();
+				String show="";
+				for(shoppinglist o:l) {
+					show=show+
+					"會員交易碼："+o.getMembercode()+"\t名字："+o.getName()+"\t鉛筆："+o.getPen()+
+					"\t自動筆："+o.getAutomaticpen()+"\t鋼筆："+o.getFountainpen()+"\t直尺："+o.getRuler()+
+					"\t三角板："+o.getTriangleboard()+"\t圓規："+o.getCompasses()+"\t筆記本："+o.getNotebook()+
+					"\t橡皮擦："+o.getEraser()+"\t立可白："+o.getLiquidpaper()+"\t便利貼："+o.getStickynote()+"\n==================================="
+							+ "============================================================================================================="
+							+ "================\n";	
+						}
+				output.setText(show);
+			
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+查詢個人訂單
+查詢Shoppinglist這個view的某個會員交易碼所擁有的訂單有多少筆
+
+btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(new implShoppinglist().MemberCodeIsExist(QuerymembercodeText.getText())) {//如果會員訂單碼正確存在
+					
+					List<shoppinglist> s=new implShoppinglist().QueryMemberCode(QuerymembercodeText.getText());
+					String show="";
+					for(shoppinglist o:s) {
+						show=show+"會員交易碼："+o.getMembercode()+"\t名字："+o.getName()+"\t鉛筆："+o.getPen()+
+								"\t自動筆："+o.getAutomaticpen()+"\t鋼筆："+o.getFountainpen()+"\t直尺："+o.getRuler()+
+								"\t三角板："+o.getTriangleboard()+"\t圓規："+o.getCompasses()+"\t筆記本："+o.getNotebook()+
+								"\t橡皮擦："+o.getEraser()+"\t立可白："+o.getLiquidpaper()+"\t便利貼："+o.getStickynote()+"\n==================================="
+										+ "============================================================================================================="
+										+ "================\n";	
+					}
+
+					output.setText(show+"\n您共有"+s.size()+"筆訂單");
+				}else {
+					JOptionPane.showMessageDialog(rootPane, "欲查詢個人訂單，請輸入正確會員交易碼");
+				}
+				
+				
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+更新會員訂單
+	
+updateButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int d=Integer.parseInt(idUpdate.getText());
+				
+				List<porder> l=new implPorder().selectMemberCode(membercode.getText());//查詢porder表單內的某個會員交易碼所擁有的訂單
+				for(porder o:l) {
+					if(d==o.getId()) {	//當更新欄位所填入的ID符合到前面描述的交易碼內所擁有的某筆訂單ID
+						int TRIANGLEBOARD=(int)triangleboard.getValue();
+						int STICKYNOTE=(int)(stickynote.getValue());
+						int COMPASSES=(int)(compasses.getValue());
+						int ERASER=(int)(eraser.getValue());
+						int FOUNTAINPEN=(int)(fountainpen.getValue());
+						int AUTOMATICPEN=(int)(automaticpen.getValue());
+						int RULER=(int)(ruler.getValue());
+						int PEN=(int)(pen.getValue());
+						int LIQUIDPAPER=(int)(liquidpaper.getValue());
+						int NOTEBOOK=(int)(notebook.getValue());
+						String MEMBERCODE=membercode.getText();
+						
+						porder p=new implPorder().selectId(d);
+						p.setAutomaticpen(AUTOMATICPEN);
+						p.setCompasses(COMPASSES);
+						p.setEraser(ERASER);
+						p.setFountainpen(FOUNTAINPEN);
+						p.setLiquidpaper(LIQUIDPAPER);
+						p.setNotebook(NOTEBOOK);
+						p.setPen(PEN);
+						p.setRuler(RULER);
+						p.setStickynote(STICKYNOTE);
+						p.setTriangleboard(TRIANGLEBOARD);
+						
+						new implPorder().update(p);
+						JOptionPane.showMessageDialog(rootPane, "更新完畢。");
+						break;	//找到就跳離
+					}else {
+						JOptionPane.showMessageDialog(rootPane, "搜索中...");//若是全部搜索一遍也沒有對應ID則以"搜索中作結尾"
+						
+					}
+				}
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+查詢此會員交易碼的訂單ID
+
+btnNewButton_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				List<porder> l=new implPorder().selectMemberCode(membercode.getText());
+				String show="";
+				for(porder o:l) { //讓show得到ID供人查看
+					show=show+"ID："+o.getId()+"\t會員交易碼："+o.getMembercode()+"\t鉛筆："+o.getPen()+
+							"\t自動筆："+o.getAutomaticpen()+"\t鋼筆："+o.getFountainpen()+"\t直尺："+o.getRuler()+
+							"\t三角板："+o.getTriangleboard()+"\t圓規："+o.getCompasses()+"\t筆記本："+o.getNotebook()+
+							"\t橡皮擦："+o.getEraser()+"\t立可白："+o.getLiquidpaper()+"\t便利貼："+o.getStickynote()+"\n==================================="
+									+ "============================================================================================================="
+									+ "================\n";	
+				}
+				output_3.setText(show);
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+刪除訂單
+	
+deleteButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int d=Integer.parseInt(idText.getText());
+				
+				List<porder> l=new implPorder().selectMemberCode(membercodeIDText.getText());
+				
+				for(porder o:l) {
+					if(d==o.getId()) { //安全檢驗機制，只給當下搜尋的會員交易碼內所查詢到的ID刪除，避免亂刪其他人的訂單
+						new implPorder().delete(d);
+						JOptionPane.showMessageDialog(rootPane, "刪除完畢。");
+						break;
+					}else {
+						JOptionPane.showMessageDialog(rootPane, "搜索中...");
+					}
+				}
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+返回購物頁面切換
+backButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				porderUI pU=new porderUI(true);
+				pU.show();
+				dispose();
+			}
+		});
+/*---------------------------------------------------------------------------------------------------------------------------------------------*/
+輸入會員交易碼，查詢欲刪除訂單的ID	
+
+btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				List<porder> l=new implPorder().selectMemberCode(membercodeIDText.getText());
+				
+				if(new implPorder().MemberCodeIsExist(membercodeIDText.getText())) { //如果會員交易碼確實存在
+					String show="";
+				for(porder o:l) {
+					show=show+"ID："+o.getId()+"\t會員交易碼："+o.getMembercode()+"\t鉛筆："+o.getPen()+
+							"\t自動筆："+o.getAutomaticpen()+"\t鋼筆："+o.getFountainpen()+"\t直尺："+o.getRuler()+
+							"\t三角板："+o.getTriangleboard()+"\t圓規："+o.getCompasses()+"\t筆記本："+o.getNotebook()+
+							"\t橡皮擦："+o.getEraser()+"\t立可白："+o.getLiquidpaper()+"\t便利貼："+o.getStickynote()+"\n==================================="
+									+ "============================================================================================================="
+									+ "================\n";	
+				}
+				output_2.setText(show);
+				}
+				else {
+					JOptionPane.showMessageDialog(rootPane, "請先輸入正確的欲刪除訂單的會員交易碼");
+				}
+				
+			}
+		});
